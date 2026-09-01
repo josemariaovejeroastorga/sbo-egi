@@ -1,10 +1,12 @@
 import { useState } from 'react'
 import * as XLSX from 'xlsx'
 import TablaItemizado from './TablaItemizado'
+import AsignarPredecesoras from './AsignarPredecesoras'
 
 function ModuloCarga() {
   const [archivo, setArchivo] = useState(null)
   const [itemizado, setItemizado] = useState([])
+  const [itemizadoConPredecesoras, setItemizadoConPredecesoras] = useState([])
 
   const manejarSeleccion = (evento) => {
     const archivoSeleccionado = evento.target.files[0]
@@ -21,8 +23,7 @@ function ModuloCarga() {
         dateNF: 'dd/mm/yyyy',
         range: 2,
       })
-      console.log('Primera fila cruda:', filas[0])
-
+      
       const aNumero = (valor) => {
   if (!valor) return 0
   const limpio = String(valor)
@@ -58,8 +59,13 @@ function ModuloCarga() {
       {archivo && <p>Archivo seleccionado: {archivo.name}</p>}
       {itemizado.length > 0 && <p>Filas cargadas: {itemizado.length}</p>}
       {itemizado.length > 0 && <TablaItemizado datos={itemizado} />}
+      {itemizado.length > 0 && (
+      <AsignarPredecesoras
+      itemizado={itemizado}
+      onConfirmar={(resultado) => setItemizadoConPredecesoras(resultado)}
+      />
+    )}
     </div>
   )
 }
-
-export default ModuloCarga
+ export default ModuloCarga
