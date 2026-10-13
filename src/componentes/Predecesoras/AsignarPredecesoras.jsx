@@ -5,21 +5,25 @@ function AsignarPredecesores({ itemizado, onConfirmar }) {
   const [predecesores, setPredecesores] = useState({})
 
   const manejarCambio = (itemActual, itemPredecesor) => {
-    setPredecesores({
-      ...predecesores,
+    setPredecesores((anterior) => ({
+      ...anterior,
       [itemActual]: itemPredecesor,
-    })
+    }))
   }
 
   const confirmar = () => {
-    const itemizadoConPredecesores = itemizado.map((fila) => ({
+    const itemizadoConPredecesoras = itemizado.map((fila) => ({
       ...fila,
       predecesores: predecesores[fila.item] ? [predecesores[fila.item]] : [],
     }))
-    console.log('Itemizado con predecesoras:', itemizadoConPredecesores)
-    onConfirmar(itemizadoConPredecesores)
+    console.log('Itemizado con predecesoras:', itemizadoConPredecesoras)
+    console.log('typeof onConfirmar =', typeof onConfirmar)
+     try {
+     onConfirmar(itemizadoConPredecesoras)
+      } catch (error) {
+      console.error('Falló onConfirmar:', error)
+      }
   }
-
   return (
     <div>
       <h2>Asignar predecesoras</h2>
@@ -45,5 +49,4 @@ function AsignarPredecesores({ itemizado, onConfirmar }) {
     </div>
   )
 }
-
 export default AsignarPredecesores
