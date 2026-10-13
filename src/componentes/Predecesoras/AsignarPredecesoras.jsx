@@ -1,8 +1,23 @@
 
 import { useState } from 'react'
+const leerGuardado = (clave,itemizado) => {
+  try{
+    const crudo = localStorage.getItem(clave)
+    if (!crudo) return {}
+    const guardado = JSON.parse(crudo)
+    const codigos = new Set(itemizaedo.map((f) => f.item))
+    return Object.fromEntries(
+      Object.entries(guardado).filter(
+        ([item,pred])=> codigos.has(item) && codigos.has(pred)
+      )
+    )
+  } catch {
+    return {}
+  }
+}
 
-function AsignarPredecesores({ itemizado, onConfirmar }) {
-  const [predecesores, setPredecesores] = useState({})
+function AsignarPredecesores({ itemizado, onConfirmar,clave='sbo-egi:predecesores' }) {
+  const [predecesores, setPredecesores] = useState(() => leerGuardado(clave,itemizado))
 
   const manejarCambio = (itemActual, itemPredecesor) => {
     setPredecesores((anterior) => ({
@@ -12,18 +27,17 @@ function AsignarPredecesores({ itemizado, onConfirmar }) {
   }
 
   const confirmar = () => {
+    try{
+      localStorage.setItem(clave,JSON.stringify(predecesores))
+    }catch (error) {
+      console.error('No se pudo guardar en localStorage:', error)
+    }
     const itemizadoConPredecesoras = itemizado.map((fila) => ({
       ...fila,
       predecesores: predecesores[fila.item] ? [predecesores[fila.item]] : [],
     }))
-    console.log('Itemizado con predecesoras:', itemizadoConPredecesoras)
-    console.log('typeof onConfirmar =', typeof onConfirmar)
-     try {
-     onConfirmar(itemizadoConPredecesoras)
-      } catch (error) {
-      console.error('Falló onConfirmar:', error)
-      }
-  }
+      onConfirmar(itemizadoConPredecesoras)
+    }
   return (
     <div>
       <h2>Asignar predecesoras</h2>

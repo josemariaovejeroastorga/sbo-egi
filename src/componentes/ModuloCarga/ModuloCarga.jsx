@@ -93,12 +93,10 @@ function ModuloCarga({onConfirmar}) {
       {itemizado.length > 0 && <TablaItemizado datos={itemizado} />}
       {itemizado.length > 0 && (
       <AsignarPredecesoras
+      key={archivo?.name}
+      clave={`sbo-egi:predecesores:{archivo?.name}`}
       itemizado={itemizado}
-      onConfirmar={(resultado) => {
-      console.log('PADRE recibió:', resultado)
-      console.log('ModuloCarga reenvía a App. typeof onConfirmar=', typeof onConfirmar)
-      onConfirmar(resultado)
-      }}
+      onConfirmar={(resultado) => onConfirmar(resultado)}
       />
       )
       }

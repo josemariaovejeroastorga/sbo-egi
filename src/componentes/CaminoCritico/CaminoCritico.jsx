@@ -11,7 +11,7 @@ const aDias = (texto) => {
   return Math.round(Date.UTC(a, m - 1, d) / MS_DIA)
 }
 
-const deDias = (n) => {
+export const deDias = (n) => {
   const f = new Date(n * MS_DIA)
   const dd = String(f.getUTCDate()).padStart(2, '0')
   const mm = String(f.getUTCMonth() + 1).padStart(2, '0')
@@ -52,11 +52,12 @@ export function calcularCaminoCritico(items) {
 
   // 3. Nodos
   const nodos = new Map(
-    items.map((it) => [
+    items.map((it,idx) => [
       String(it.item),
       {
         ...it,
         id: String(it.item),
+        pos: idx,
         preds: normalizarPreds(it.predecesores ?? it.predecesoras ?? it.predecesora),
         sucs: [],
         dur: aDias(it.fechaFin) - aDias(it.fechaInicio) + 1,
@@ -121,6 +122,8 @@ export function calcularCaminoCritico(items) {
     const n = nodos.get(id)
     return {
       item: n.id,
+      posicion: n.pos,
+      es: n.es,
       designacion: n.designacion,
       duracion: n.dur,
       inicioTemprano: deDias(inicioProyecto + n.es),
@@ -134,5 +137,5 @@ export function calcularCaminoCritico(items) {
     }
   })
 
-  return { resultado, duracionTotal: total }
+  return { resultado, duracionTotal: total, inicioProyecto }
 }

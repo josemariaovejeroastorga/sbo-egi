@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import {calcularCaminoCritico} from '../CaminoCritico/caminoCritico'
+import DiagramaGantt from '../DiagramaGannt/DiagramaGannt'
 
 function ModuloAnalisis({ items=[] }) {
   
@@ -66,6 +67,10 @@ function ModuloAnalisis({ items=[] }) {
           ))}
         </tbody>
       </table>
+      <DiagramaGantt 
+      resultado={analisis.resultado}
+      duracionTotal={analisis.duracionTotal}
+      inicioProyecto={analisis.inicioProyecto}/>
     </div>
   )
 }
